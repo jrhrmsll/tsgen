@@ -27,7 +27,7 @@ paths:
 
 ## Usage
 
-To build `tsgen` Docker images just run
+To build `tsgen` Docker image just run
 
 ```
 docker build -t tsgen .
@@ -49,10 +49,10 @@ password: admin
 
 `tsgen` has a very simple API, as follows
 
-- GET /api/health
-- GET /api/faults
-- GET /api/config
-- POST /api/paths/:path/faults/:code
+- `GET /api/health`
+- `GET /api/faults`
+- `GET /api/config`
+- `POST /api/paths/:path/faults/:code`
 
 The POST option is designed to changes faults errors rates at runtime, using a JSON payload
 
@@ -71,7 +71,7 @@ Three examples are included in a directory with the same name:
 - errors-rates
 - multi-shop
 
-As its name points, *basic* is the most trivial, just to show how tsgen works.
+As its name points, *basic* is the most trivial, just to show how `tsgen` works.
 
 The *errors-rates* is designed to demonstrate how the [Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/) works, particularly how alerts are triggered in correspondence with the error rate value; lower values require more time while greater ones are triggered very quickly.
 
