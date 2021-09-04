@@ -1,0 +1,24 @@
+paths:
+  - name: products
+    response_time: 100ms
+    faults:
+      - code: 500
+        rate: 0.001
+      - code: 401
+        rate: 0.001
+
+  - name: categories
+    response_time: 125ms
+    faults:
+      - code: 500
+        rate: 0.001
+      - code: 401
+        rate: 0.001
+
+  - name: orders
+    response_time: 230ms
+    faults:
+      - code: 500
+        rate: 0.001
+      - code: 401
+        rate: 0.001

@@ -1,0 +1,22 @@
+groups:
+- name: tsgen-alerting-rules
+  rules:
+  - alert: ServiceErrorsIncrease
+    expr: (service:tsgen_requests_errors:ratio_rate5m >= (14.4 * 0.001) and
+      service:tsgen_requests_errors:ratio_rate1h >= (14.4 * 0.001)) or
+      (service:tsgen_requests_errors:ratio_rate30m >= (6 * 0.001) and
+      service:tsgen_requests_errors:ratio_rate6h >= (6 * 0.001))
+    labels:
+      severity: critical
+    annotations:
+      summary: Service error increase!
+
+  - alert: PathErrorsIncrease
+    expr: (path:tsgen_requests_errors:ratio_rate5m >= (14.4 * 0.001) and
+      path:tsgen_requests_errors:ratio_rate1h >= (14.4 * 0.001)) or
+      (path:tsgen_requests_errors:ratio_rate30m >= (6 * 0.001) and
+      path:tsgen_requests_errors:ratio_rate6h >= (6 * 0.001))
+    labels:
+      severity: critical
+    annotations:
+      summary: Path error increase!

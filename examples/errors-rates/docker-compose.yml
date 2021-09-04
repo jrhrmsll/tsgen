@@ -1,0 +1,42 @@
+version: '3.2'
+
+services:
+  tsgen:
+    image: tsgen
+    restart: unless-stopped
+    ports:
+      - "8080:8080/tcp"
+    volumes:
+      - ./runtime/tsgen/config.yml:/etc/tsgen/config.yml
+
+  prometheus:
+    image: prom/prometheus:v2.29.2
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    user: "1000:1000"
+    volumes:
+      - ./runtime/prometheus/data:/prometheus
+      - ./runtime/prometheus/etc:/etc/prometheus
+
+  pushgateway:
+    image: prom/pushgateway:v1.4.1
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
+    volumes:
+      - ./runtime/pushgateway:/pushgateway
+    command:
+      - '--persistence.file=/pushgateway/metrics'
+      - '--persistence.interval=30s'
+
+  grafana:
+    image: grafana/grafana:8.1.2
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./runtime/grafana/data/:/var/lib/grafana
+      - ./runtime/grafana/dashboards/:/var/lib/dashboards
+      - ./runtime/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./runtime/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards

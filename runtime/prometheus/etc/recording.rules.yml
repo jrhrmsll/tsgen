@@ -1,0 +1,86 @@
+groups:
+  - name: tsgen-recording-rules
+    rules:
+    #
+    # services
+    #
+    # http total requests
+    - record: service:tsgen_requests_total:rate5m
+      expr: sum(rate(tsgen_requests_total[5m])) by(job)
+
+    - record: service:tsgen_requests_total:rate30m
+      expr: sum(rate(tsgen_requests_total[30m])) by(job)
+
+    - record: service:tsgen_requests_total:rate1h
+      expr: sum(rate(tsgen_requests_total[1h])) by(job)
+
+    - record: service:tsgen_requests_total:rate6h
+      expr: sum(rate(tsgen_requests_total[6h])) by(job)
+
+    # http failed requests
+    - record: service:tsgen_failed_requests:rate5m
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[5m])) by(job)
+
+    - record: service:tsgen_failed_requests:rate30m
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[30m])) by(job)
+
+    - record: service:tsgen_failed_requests:rate1h
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[1h])) by(job)
+
+    - record: service:tsgen_failed_requests:rate6h
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[6h])) by(job)
+
+    # http errors ratio
+    - record: service:tsgen_requests_errors:ratio_rate5m
+      expr: service:tsgen_failed_requests:rate5m / service:tsgen_requests_total:rate5m
+
+    - record: service:tsgen_requests_errors:ratio_rate30m
+      expr: service:tsgen_failed_requests:rate30m / service:tsgen_requests_total:rate30m
+
+    - record: service:tsgen_requests_errors:ratio_rate1h
+      expr: service:tsgen_failed_requests:rate1h / service:tsgen_requests_total:rate1h
+
+    - record: service:tsgen_requests_errors:ratio_rate6h
+      expr: service:tsgen_failed_requests:rate6h / service:tsgen_requests_total:rate6h
+
+    #
+    # path
+    #
+    # http total requests
+    - record: path:tsgen_requests_total:rate5m
+      expr: sum(rate(tsgen_requests_total[5m])) by(job, url)
+
+    - record: path:tsgen_requests_total:rate30m
+      expr: sum(rate(tsgen_requests_total[30m])) by(job, url)
+
+    - record: path:tsgen_requests_total:rate1h
+      expr: sum(rate(tsgen_requests_total[1h])) by(job, url)
+
+    - record: path:tsgen_requests_total:rate6h
+      expr: sum(rate(tsgen_requests_total[6h])) by(job, url)
+
+    # http failed requests
+    - record: path:tsgen_failed_requests:rate5m
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[5m])) by(job, url)
+
+    - record: path:tsgen_failed_requests:rate30m
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[30m])) by(job, url)
+
+    - record: path:tsgen_failed_requests:rate1h
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[1h])) by(job, url)
+
+    - record: path:tsgen_failed_requests:rate6h
+      expr: sum(rate(tsgen_requests_total{code=~"5.*"}[6h])) by(job, url)
+
+    # http errors ratio
+    - record: path:tsgen_requests_errors:ratio_rate5m
+      expr: path:tsgen_failed_requests:rate5m / path:tsgen_requests_total:rate5m
+
+    - record: path:tsgen_requests_errors:ratio_rate30m
+      expr: path:tsgen_failed_requests:rate30m / path:tsgen_requests_total:rate30m
+
+    - record: path:tsgen_requests_errors:ratio_rate1h
+      expr: path:tsgen_failed_requests:rate1h / path:tsgen_requests_total:rate1h
+
+    - record: path:tsgen_requests_errors:ratio_rate6h
+      expr: path:tsgen_failed_requests:rate6h / path:tsgen_requests_total:rate6h

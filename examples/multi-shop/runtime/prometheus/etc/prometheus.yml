@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+
+rule_files:
+  - /etc/prometheus/alerting.rules.yml
+  - /etc/prometheus/recording.rules.yml
+
+scrape_configs:
+- job_name: prometheus
+  metrics_path: /metrics
+  static_configs:
+  - targets:
+    - localhost:9090
+
+- job_name: shop1
+  metrics_path: /metrics
+  static_configs:
+  - targets:
+    - shop1:8080
+
+- job_name: shop2
+  metrics_path: /metrics
+  static_configs:
+  - targets:
+    - shop2:8080
