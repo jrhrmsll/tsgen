@@ -1,6 +1,6 @@
 # tsgen
 
-`tsgen` is a little Go program to simulate HTTP requests faults and demonstrate how Prometheus alerts based on the [Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/) works.
+`tsgen` is a little Go program to simulate HTTP requests faults and ilustrate how Prometheus alerts based on the [Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/) works.
 Using it is easy, just define some paths, attach some faults and start to make requests.
 
 ## Config
@@ -52,9 +52,9 @@ password: admin
 - `GET /api/health`
 - `GET /api/faults`
 - `GET /api/config`
-- `POST /api/paths/:path/faults/:code`
+- `PUT /api/paths/:path/faults/:code`
 
-The POST option is designed to changes faults errors rates at runtime, using a JSON payload
+The PUT option is designed to changes faults errors rates at runtime, using a JSON payload
 
 ```
 {"rate": float32}
@@ -62,7 +62,7 @@ The POST option is designed to changes faults errors rates at runtime, using a J
 
 e.g.:
 ```
-curl -X POST -H "Content-Type: application/json" http://localhost:8080/api/paths/hello/faults/500 --data '{"rate": 0.1}'
+curl -X PUT -H "Content-Type: application/json" http://localhost:8080/api/paths/hello/faults/500 --data '{"rate": 0.1}'
 ```
 
 ## Examples

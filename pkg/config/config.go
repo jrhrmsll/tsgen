@@ -20,7 +20,7 @@ type Path struct {
 
 type Config struct {
 	Paths []Path `yaml:"paths"`
-	Raw   string `yaml:"-"`
+	raw   string
 }
 
 func Load(filename string) (*Config, error) {
@@ -36,7 +36,11 @@ func Load(filename string) (*Config, error) {
 		return nil, err
 	}
 
-	cfg.Raw = string(content)
+	cfg.raw = string(content)
 
 	return cfg, nil
+}
+
+func (cfg *Config) Raw() string {
+	return cfg.raw
 }

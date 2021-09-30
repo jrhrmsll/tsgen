@@ -5,9 +5,11 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"tsgen/internal/config"
-	"tsgen/internal/fault"
-	"tsgen/internal/slow"
+
+	"github.com/jrhrmsll/tsgen/cmd/tsgen/http/controller"
+	"github.com/jrhrmsll/tsgen/cmd/tsgen/http/services"
+	"github.com/jrhrmsll/tsgen/pkg/config"
+	"github.com/jrhrmsll/tsgen/pkg/store"
 
 	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
@@ -17,12 +19,6 @@ import (
 const subsystem = "tsgen"
 
 var configFile string
-
-func success(v string) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.JSON(http.StatusOK, v)
-	}
-}
 
 func main() {
 	flag.StringVar(&configFile, "config.file", "config.yml", "tsgen configuration file path.")
@@ -36,46 +32,44 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	app := echo.New()
-
-	app.Use(middleware.Logger())
-	app.Use(middleware.Recover())
-
-	p := prometheus.NewPrometheus(subsystem, nil)
-	p.Use(app)
-
-	api := app.Group("api")
-	{
-		api.GET("/health", func(c echo.Context) error {
-			return c.JSON(http.StatusOK, "ok")
-		})
-
-		api.GET("/config", config.Handler(cfg))
-
-		api.GET("/faults", fault.List)
-
-		api.POST("/paths/:path/faults/:code", fault.Update)
+	store, err := store.NewStore().Init(cfg)
+	if err != nil {
+		logger.Fatal(err)
 	}
 
-	for _, cfgPath := range cfg.Paths {
-		middlewares := []echo.MiddlewareFunc{}
-		for _, cfgFault := range cfgPath.Faults {
-			errorMidleware, err := fault.Middleware(cfgPath.Name, cfgFault.Code, cfgFault.Rate)
-			if err != nil {
-				logger.Fatal(err)
-			}
+	app := echo.New()
+	{
+		app.Use(middleware.Logger())
+		app.Use(middleware.Recover())
 
-			middlewares = append(middlewares, errorMidleware)
-		}
+		p := prometheus.NewPrometheus(subsystem, nil)
+		p.Use(app)
+	}
 
-		slowMiddleware, err := slow.Middleware(cfgPath.ResponseTime)
+	// routes for paths and their faults as echo middlewares
+	for _, path := range store.Paths() {
+		middlewares, err := services.NewPathMiddlewareAdderService().Adds(path)
 		if err != nil {
 			logger.Fatal(err)
 		}
 
-		middlewares = append(middlewares, slowMiddleware)
+		app.GET(path.Name, controller.Default(path.Name).Echo, middlewares.ToEchoMiddlewareFunc()...)
+	}
 
-		app.GET(cfgPath.Name, success(cfgPath.Name), middlewares...)
+	// basic API, including changing a fault rate at runtime
+	api := app.Group("api")
+	{
+		configController := controller.NewConfigController(cfg.Raw())
+		faultController := controller.NewFaultController(store)
+
+		api.GET("/health", func(c echo.Context) error {
+			return c.JSON(http.StatusOK, "ok")
+		})
+
+		api.GET("/config", configController.Show)
+
+		api.GET("/faults", faultController.Faults)
+		api.PUT("/paths/:path/faults/:code", faultController.UpdateFault)
 	}
 
 	app.Logger.Fatal(app.Start(":8080"))
