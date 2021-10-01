@@ -12,6 +12,10 @@ import (
 
 const defaultIndent = "  "
 
+type payload struct {
+	Rate float32 `json:"rate"`
+}
+
 type Fault struct {
 	store *store.Store
 }
@@ -34,9 +38,7 @@ func (controller *Fault) UpdateFault(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	payload := new(struct {
-		Rate float32 `json:"rate"`
-	})
+	payload := new(payload)
 	if err := c.Bind(payload); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}

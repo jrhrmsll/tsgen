@@ -22,7 +22,8 @@ func NewFault(path string, code int, rate float32) (*Fault, error) {
 		Rate:       rate,
 	}
 
-	if ok, err := NewFaultSpecification().IsSatisfyBy(fault); !ok {
+	faultSpecification := NewFaultSpecification()
+	if ok, err := faultSpecification.IsSatisfyBy(fault); !ok {
 		return nil, err
 	}
 

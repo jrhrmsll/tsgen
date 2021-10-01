@@ -23,6 +23,10 @@ type Config struct {
 	raw   string
 }
 
+func (cfg *Config) Raw() string {
+	return cfg.raw
+}
+
 func Load(filename string) (*Config, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -39,8 +43,4 @@ func Load(filename string) (*Config, error) {
 	cfg.raw = string(content)
 
 	return cfg, nil
-}
-
-func (cfg *Config) Raw() string {
-	return cfg.raw
 }

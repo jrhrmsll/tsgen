@@ -56,7 +56,7 @@ func main() {
 		app.GET(path.Name, controller.Default(path.Name).Echo, middlewares.ToEchoMiddlewareFunc()...)
 	}
 
-	// basic API, including changing a fault rate at runtime
+	// API
 	api := app.Group("api")
 	{
 		configController := controller.NewConfigController(cfg.Raw())

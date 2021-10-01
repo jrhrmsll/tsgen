@@ -4,9 +4,7 @@ import (
 	"fmt"
 )
 
-const (
-	upperBound = 0.999999
-)
+const upperBound = 0.999999
 
 type FaultSpecification struct {
 	upperBound float32

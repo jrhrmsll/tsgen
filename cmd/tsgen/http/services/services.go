@@ -43,7 +43,6 @@ func fn(fault *model.Fault) func() float32 {
 }
 
 func (srv *PathMiddlewareAdderService) Adds(path *model.Path) (Middlewares, error) {
-
 	middlewares := Middlewares{}
 
 	// slow injector is use to add some latency to the response
