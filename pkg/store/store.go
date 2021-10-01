@@ -9,8 +9,6 @@ import (
 	"github.com/jrhrmsll/tsgen/pkg/store/internal/index"
 )
 
-const ok = 1
-
 func key(s string, i int) string {
 	return fmt.Sprintf("%s:%d", s, i)
 }
@@ -18,9 +16,8 @@ func key(s string, i int) string {
 type Store struct {
 	paths model.Paths
 
-	pathIndex           index.Index
-	pathUniqueNameIndex index.Index
-	faultIndex          index.Index
+	pathIndex  index.Index
+	faultIndex index.Index
 
 	mu sync.RWMutex
 }
@@ -29,9 +26,8 @@ func NewStore() *Store {
 	return &Store{
 		paths: model.Paths{},
 
-		pathIndex:           index.NewIndex(),
-		pathUniqueNameIndex: index.NewIndex(),
-		faultIndex:          index.NewIndex(),
+		pathIndex:  index.NewIndex(),
+		faultIndex: index.NewIndex(),
 	}
 }
 
@@ -86,14 +82,13 @@ func (s *Store) InsertPath(path *model.Path) error {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	if s.pathUniqueNameIndex.Has(path.Name) {
+	if s.pathIndex.Has(path.Name) {
 		return fmt.Errorf("path '%s' already exist", path.Name)
 	}
 
 	s.paths = append(s.paths, path)
 
 	s.pathIndex.Set(path.Name, len(s.paths)-1)
-	s.pathUniqueNameIndex.Set(path.Name, ok)
 
 	return nil
 }
