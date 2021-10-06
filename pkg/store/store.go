@@ -78,7 +78,7 @@ func (s *Store) Faults() model.Faults {
 	return faults
 }
 
-func (s *Store) InsertPath(path *model.Path) error {
+func (s *Store) InsertPath(path model.Path) error {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
@@ -93,7 +93,7 @@ func (s *Store) InsertPath(path *model.Path) error {
 	return nil
 }
 
-func (s *Store) InsertFault(fault *model.Fault) error {
+func (s *Store) InsertFault(fault model.Fault) error {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
@@ -114,7 +114,26 @@ func (s *Store) InsertFault(fault *model.Fault) error {
 	return nil
 }
 
-func (s *Store) UpdateFault(fault *model.Fault) error {
+func (s *Store) FindFaultBy(path string, code int) (model.Fault, error) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+
+	if !s.pathIndex.Has(path) {
+		return model.Fault{}, fmt.Errorf("path '%s' not found", path)
+	}
+
+	faultKey := key(path, code)
+	if !s.faultIndex.Has(faultKey) {
+		return model.Fault{}, fmt.Errorf("fault '%d' not found for path '%s'", code, path)
+	}
+
+	pathIndex := s.pathIndex.Get(path)
+	faultIndex := s.faultIndex.Get(faultKey)
+
+	return s.paths[pathIndex].Faults[faultIndex], nil
+}
+
+func (s *Store) UpdateFault(fault model.Fault) error {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 

@@ -47,8 +47,9 @@ func main() {
 	}
 
 	// routes for paths and their faults as echo middlewares
+	pathMiddlewareAdderService := services.NewPathMiddlewareAdderService(store)
 	for _, path := range store.Paths() {
-		middlewares, err := services.NewPathMiddlewareAdderService().Adds(path)
+		middlewares, err := pathMiddlewareAdderService.Adds(path)
 		if err != nil {
 			logger.Fatal(err)
 		}

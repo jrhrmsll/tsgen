@@ -16,7 +16,7 @@ func NewFaultSpecification() *FaultSpecification {
 	}
 }
 
-func (spec *FaultSpecification) IsSatisfyBy(fault *Fault) (bool, error) {
+func (spec *FaultSpecification) IsSatisfyBy(fault Fault) (bool, error) {
 	if fault.Rate > spec.upperBound {
 		return false, fmt.Errorf("invalid fault rate '%.3f' for code '%d' and path '%s'", fault.Rate, fault.Code, fault.Path)
 	}

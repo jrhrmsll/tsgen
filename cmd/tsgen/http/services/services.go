@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/jrhrmsll/tsgen/pkg/model"
+	"github.com/jrhrmsll/tsgen/pkg/store"
 
 	"github.com/github/go-fault"
 	"github.com/labstack/echo/v4"
@@ -26,14 +27,24 @@ func (middlewares Middlewares) ToEchoMiddlewareFunc() []echo.MiddlewareFunc {
 	return echoMiddlewares
 }
 
-type PathMiddlewareAdderService struct{}
-
-func NewPathMiddlewareAdderService() *PathMiddlewareAdderService {
-	return &PathMiddlewareAdderService{}
+type PathMiddlewareAdderService struct {
+	store *store.Store
 }
 
-func fn(fault *model.Fault) func() float32 {
+func NewPathMiddlewareAdderService(store *store.Store) *PathMiddlewareAdderService {
+	return &PathMiddlewareAdderService{
+		store: store,
+	}
+}
+
+func (srv *PathMiddlewareAdderService) fn(fault model.Fault) func() float32 {
+	// ALWAYS in this context means no participation
 	return func() float32 {
+		fault, err := srv.store.FindFaultBy(fault.Path, fault.Code)
+		if err != nil {
+			return ALWAYS
+		}
+
 		if rand.Float32() <= fault.Rate {
 			return fault.Rate
 		}
@@ -42,7 +53,7 @@ func fn(fault *model.Fault) func() float32 {
 	}
 }
 
-func (srv *PathMiddlewareAdderService) Adds(path *model.Path) (Middlewares, error) {
+func (srv *PathMiddlewareAdderService) Adds(path model.Path) (Middlewares, error) {
 	middlewares := Middlewares{}
 
 	// slow injector is use to add some latency to the response
@@ -72,7 +83,7 @@ func (srv *PathMiddlewareAdderService) Adds(path *model.Path) (Middlewares, erro
 		f, err := fault.NewFault(errorInjector,
 			fault.WithEnabled(true),
 			fault.WithParticipation(ALWAYS),
-			fault.WithRandFloat32Func(fn(pathFault)),
+			fault.WithRandFloat32Func(srv.fn(pathFault)),
 		)
 
 		if err != nil {

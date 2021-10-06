@@ -12,10 +12,10 @@ type Fault struct {
 	Rate       float32 `json:"rate"`
 }
 
-type Faults []*Fault
+type Faults []Fault
 
-func NewFault(path string, code int, rate float32) (*Fault, error) {
-	fault := &Fault{
+func NewFault(path string, code int, rate float32) (Fault, error) {
+	fault := Fault{
 		Path:       path,
 		Code:       code,
 		StatusText: http.StatusText(code),
@@ -24,7 +24,7 @@ func NewFault(path string, code int, rate float32) (*Fault, error) {
 
 	faultSpecification := NewFaultSpecification()
 	if ok, err := faultSpecification.IsSatisfyBy(fault); !ok {
-		return nil, err
+		return Fault{}, err
 	}
 
 	return fault, nil
@@ -35,10 +35,10 @@ type Path struct {
 	ResponseTime time.Duration `yaml:"response_time"`
 	Faults       Faults        `json:"faults"`
 }
-type Paths []*Path
+type Paths []Path
 
-func NewPath(name string, responseTime time.Duration) (*Path, error) {
-	return &Path{
+func NewPath(name string, responseTime time.Duration) (Path, error) {
+	return Path{
 		Name:         name,
 		ResponseTime: responseTime,
 	}, nil
