@@ -114,13 +114,13 @@ With `stress` a script similar to the next could be used
 paths=("e0002pct" "e0003pct" "e0005pct" "e0008pct" "e0013pct" "e0021pct" "e0034pct" "e0055pct" "e0089pct")
 
 for path in ${paths[@]}; do
-    nohup go run github.com/jrhrmsll/stress@latest -throughput 15 -duration 2h -url http://localhost:8080/${path} &
+    nohup go run github.com/jrhrmsll/stress@latest -throughput 15 -duration 3h -url http://localhost:8080/${path} &
 done
 
 exit 0
 ```
 
-Some minutes later a second script should be executed to change the error rates as was described above. Finally, when all the alerts become triggered (around 30 minutes later) a last script execution changes the errors rates to the initial values.
+A hour later a second script should be executed to change the error rates as was described above. Finally, when all the alerts become triggered (around 30 minutes later) a last script execution changes the errors rates to the initial values.
 
 All these scripts are include inside the directory `examples/errors-rates/scripts` using meaningful names:
 - incident-start.sh
