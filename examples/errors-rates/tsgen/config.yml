@@ -1,55 +1,54 @@
 paths:
   # paths names based on Fibonacci sequence [2, 89]
-  - name: e2pct
+  - name: e0002pct
     response_time: 2ms
     faults:
       - code: 500
         rate: 0.001
 
-  - name: e3pct
+  - name: e0003pct
     response_time: 3ms
     faults:
       - code: 500
         rate: 0.001
 
-  - name: e5pct
+  - name: e0005pct
     response_time: 5ms
     faults:
       - code: 500
         rate: 0.001
 
-  - name: e8pct
+  - name: e0008pct
     response_time: 8ms
     faults:
       - code: 500
         rate: 0.001
 
-
-  - name: e13pct
+  - name: e0013pct
     response_time: 13ms
     faults:
       - code: 500
         rate: 0.001
 
-  - name: e21pct
+  - name: e0021pct
     response_time: 21ms
     faults:
       - code: 500
         rate: 0.001
 
-  - name: e34pct
+  - name: e0034pct
     response_time: 34ms
     faults:
       - code: 500
         rate: 0.001
 
-  - name: e55pct
+  - name: e0055pct
     response_time: 55ms
     faults:
       - code: 500
         rate: 0.001
 
-  - name: e89pct
+  - name: e0089pct
     response_time: 89ms
     faults:
       - code: 500

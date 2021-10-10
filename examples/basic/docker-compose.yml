@@ -7,7 +7,7 @@ services:
     ports:
       - "8080:8080/tcp"
     volumes:
-      - ./runtime/tsgen/config.yml:/etc/tsgen/config.yml
+      - ./tsgen/config.yml:/etc/tsgen/config.yml
 
   prometheus:
     image: prom/prometheus:v2.29.2
@@ -16,8 +16,10 @@ services:
       - "9090:9090"
     user: "1000:1000"
     volumes:
-      - ./runtime/prometheus/data:/prometheus
-      - ./runtime/prometheus/etc:/etc/prometheus
+      - ../_common/prometheus/etc/alerting.rules.yml:/etc/prometheus/alerting.rules.yml
+      - ../_common/prometheus/etc/recording.rules.yml:/etc/prometheus/recording.rules.yml
+      - ./prometheus/etc/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
 
   grafana:
     image: grafana/grafana:8.1.2
@@ -25,7 +27,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./runtime/grafana/data/:/var/lib/grafana
-      - ./runtime/grafana/dashboards/:/var/lib/dashboards
-      - ./runtime/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-      - ./runtime/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ../_common/grafana/data/:/var/lib/grafana
+      - ../_common/grafana/dashboards/:/var/lib/dashboards
+      - ../_common/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ../_common/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
