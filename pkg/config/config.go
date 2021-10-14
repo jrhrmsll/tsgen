@@ -2,7 +2,6 @@ package config
 
 import (
 	"io/ioutil"
-	"time"
 
 	"gopkg.in/yaml.v2"
 )
@@ -13,9 +12,8 @@ type Fault struct {
 }
 
 type Path struct {
-	Name         string        `yaml:"name"`
-	ResponseTime time.Duration `yaml:"response_time"`
-	Faults       []Fault       `yaml:"faults"`
+	Name   string  `yaml:"name"`
+	Faults []Fault `yaml:"faults"`
 }
 
 type Config struct {

@@ -56,23 +56,6 @@ func (srv *PathMiddlewareAdderService) fn(fault model.Fault) func() float32 {
 func (srv *PathMiddlewareAdderService) Adds(path model.Path) (Middlewares, error) {
 	middlewares := Middlewares{}
 
-	// slow injector is use to add some latency to the response
-	slowInjector, err := fault.NewSlowInjector(path.ResponseTime)
-	if err != nil {
-		return nil, err
-	}
-
-	f, err := fault.NewFault(slowInjector,
-		fault.WithEnabled(true),
-		fault.WithParticipation(ALWAYS),
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	middlewares = append(middlewares, f.Handler)
-
 	// path fauls are use to inject errors with a probability near the fault rate
 	for _, pathFault := range path.Faults {
 		errorInjector, err := fault.NewErrorInjector(pathFault.Code)

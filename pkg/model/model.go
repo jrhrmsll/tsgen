@@ -2,7 +2,6 @@ package model
 
 import (
 	"net/http"
-	"time"
 )
 
 type Fault struct {
@@ -31,15 +30,13 @@ func NewFault(path string, code int, rate float32) (Fault, error) {
 }
 
 type Path struct {
-	Name         string        `json:"name"`
-	ResponseTime time.Duration `yaml:"response_time"`
-	Faults       Faults        `json:"faults"`
+	Name   string `json:"name"`
+	Faults Faults `json:"faults"`
 }
 type Paths []Path
 
-func NewPath(name string, responseTime time.Duration) (Path, error) {
+func NewPath(name string) (Path, error) {
 	return Path{
-		Name:         name,
-		ResponseTime: responseTime,
+		Name: name,
 	}, nil
 }

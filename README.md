@@ -5,13 +5,11 @@ Using it is easy, just define some paths, attach some faults and start to make r
 
 ## Config
 `tsgen` requires a YAML config file to define a list of paths; each path has some faults, formed by a HTTP Status Code with an error rate.
-Also every path should include a response time, in milliseconds.
 
 e.g.:
 ```
 paths:
   - name: hello
-    response_time: 20ms
     faults:
       - code: 500
         rate: 0.001
@@ -19,7 +17,6 @@ paths:
         rate: 0.1
 
   - name: world
-    response_time: 10ms
     faults:
       - code: 502
         rate: 0.005
@@ -61,7 +58,7 @@ Three examples are included in a directory with the same name:
 
 As its name points, *basic* is the most trivial, just to show how `tsgen` works.
 
-The *errors-rates* scenario is designed to prove how the [Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/) works.
+The *errors-rates* example is designed to prove how the [Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/) works.
 
 The last case, *multi-shop*, is intended to show how the Grafana "Services" dashboard is useful for multiple services when some conventions in the metrics names and labels are followed.
 
@@ -89,11 +86,11 @@ and then execute
 docker-compose up
 ```
 
-after that the following services will start:
-- `tsgen` at localhost:8080
-- Prometheus at localhost:9090
-- Grafana at localhost:3000
-- Pushgateway (if included) at localhost:9091
+after that, the following services will start:
+- `tsgen` at [localhost:8080](localhost:8080)
+- Prometheus at [localhost:9090](localhost:9090)
+- Grafana at [localhost:3000](localhost:3000)
+- Pushgateway (if included) at [localhost:9091](localhost:9091)
 
 To login in Grafana use default config values
 ```

@@ -1,6 +1,5 @@
 paths:
   - name: stores
-    response_time: 90ms
     faults:
       - code: 500
         rate: 0.001
@@ -8,7 +7,6 @@ paths:
         rate: 0.001
 
   - name: langs
-    response_time: 50ms
     faults:
       - code: 500
         rate: 0.001
@@ -16,7 +14,6 @@ paths:
         rate: 0.001
 
   - name: customers
-    response_time: 110ms
     faults:
       - code: 500
         rate: 0.001

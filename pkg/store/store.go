@@ -33,7 +33,7 @@ func NewStore() *Store {
 
 func (s *Store) Init(cfg *config.Config) (*Store, error) {
 	for _, cfgPath := range cfg.Paths {
-		path, err := model.NewPath(cfgPath.Name, cfgPath.ResponseTime)
+		path, err := model.NewPath(cfgPath.Name)
 		if err != nil {
 			return nil, err
 		}
