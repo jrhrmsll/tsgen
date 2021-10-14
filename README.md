@@ -87,10 +87,10 @@ docker-compose up
 ```
 
 after that, the following services will start:
-- `tsgen` at [localhost:8080](localhost:8080)
-- Prometheus at [localhost:9090](localhost:9090)
-- Grafana at [localhost:3000](localhost:3000)
-- Pushgateway (if included) at [localhost:9091](localhost:9091)
+- `tsgen` at [localhost:8080](http://localhost:8080)
+- Prometheus at [localhost:9090](http://localhost:9090)
+- Grafana at [localhost:3000](http://localhost:3000)
+- Pushgateway (if included) at [localhost:9091](http://localhost:9091)
 
 To login in Grafana use default config values
 ```
