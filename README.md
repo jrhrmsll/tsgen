@@ -1,6 +1,6 @@
 # tsgen
 
-`tsgen` is a little Go program to simulate HTTP requests faults and ilustrate how Prometheus alerts based on the [Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/) works.
+`tsgen` is a little Go program to simulate HTTP requests faults and show how Prometheus alerts based on the [Multiwindow, Multi-Burn-Rate Alerts](https://sre.google/workbook/alerting-on-slos/) works.
 Using it is easy, just define some paths, attach some faults and start to make requests.
 
 ## Config
